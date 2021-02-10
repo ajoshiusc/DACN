@@ -36,25 +36,25 @@ def configure():
  
     flags.DEFINE_integer('gpu_num', 1, 'the number of GPU')
     #—————————————————————————————————————————————————————# 
-    flags.DEFINE_string('data_dir', '/public/share/mzhang/', 'Name of data directory')
-    flags.DEFINE_string('train_data', 'pap_train.h5', 'Training data')
-    flags.DEFINE_string('valid_data', 'pap_valid.h5', 'Validation data')
+    flags.DEFINE_string('data_dir', '../Dataset/h5py/', 'Name of data directory')
+    flags.DEFINE_string('train_data', 'training_data.hdf5', 'Training data')
+    flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
     flags.DEFINE_string('test_data', 'pap_test.h5', 'Testing data')
-    flags.DEFINE_integer('valid_num',171,'the number of images in the validing set')
-    flags.DEFINE_integer('test_num',184,'the number of images in the testing set')
+    flags.DEFINE_integer('valid_num',1440,'the number of images in the validing set')
+    flags.DEFINE_integer('test_num',184,'the number of images in the testing set')  # add test data
     flags.DEFINE_integer('batch', 4, 'batch size') 
     flags.DEFINE_integer('batchsize', 4, 'total batch size') 
-    flags.DEFINE_integer('channel', 3, 'channel size')
+    flags.DEFINE_integer('channel', 1, 'channel size')        # changed channel from 3 to 1
     flags.DEFINE_integer('height', 256, 'height size')
     flags.DEFINE_integer('width', 256, 'width size')
     #flags.DEFINE_integer('cropsize', 128, 'crop size') # 
     flags.DEFINE_boolean('is_training', True, '是否训练') 
     flags.DEFINE_integer('class_num', 2, 'output class number')
     #————————————————————————————-—————————————————————————#
-    flags.DEFINE_string('logdir', '/home/mzhang/project_CNN_ACM/network4/logdir', 'Log dir')
-    flags.DEFINE_string('modeldir', '/home/mzhang/project_CNN_ACM/network4/modeldir', 'Model dir')
-    flags.DEFINE_string('sample_dir', '/home/mzhang/project_CNN_ACM/network4/samples/', 'Sample directory')
-    flags.DEFINE_string('record_dir', '/home/mzhang/project_CNN_ACM/network4/record/', 'Experiment record directory')
+    flags.DEFINE_string('logdir', '../network4/logdir', 'Log dir')
+    flags.DEFINE_string('modeldir', '../network4/modeldir', 'Model dir')
+    flags.DEFINE_string('sample_dir', '../network4/samples/', 'Sample directory')
+    flags.DEFINE_string('record_dir', '../network4/record/', 'Experiment record directory')
     #————————————————————————————-—————————————————————————# 
     flags.DEFINE_boolean('use_asc', False, 'use ASC or not')
     flags.DEFINE_string('down_conv_name', 'conv2d', 'Use which conv op: conv2d, deform_conv2d, adaptive_conv2d, adaptive_separate_conv2d')
