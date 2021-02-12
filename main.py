@@ -4,7 +4,8 @@ import argparse
 import numpy as np
 import tensorflow as tf
 from actions import Actions
-
+import warnings
+warnings.filterwarnings("ignore")
 
 def configure():
     
