@@ -50,8 +50,8 @@ def configure():
     flags.DEFINE_string('test_data', 'pap_test.h5', 'Testing data')
     flags.DEFINE_integer('valid_num',1440,'the number of images in the validing set')
     flags.DEFINE_integer('test_num',184,'the number of images in the testing set')  # add test data
-    flags.DEFINE_integer('batch', 4, 'batch size') 
-    flags.DEFINE_integer('batchsize', 4, 'total batch size') 
+    flags.DEFINE_integer('batch', 7, 'batch size')              # 4
+    flags.DEFINE_integer('batchsize', 7, 'total batch size')     # 4
     flags.DEFINE_integer('channel', 1, 'channel size')        # changed channel from 3 to 1
     flags.DEFINE_integer('height', 256, 'height size')
     flags.DEFINE_integer('width', 256, 'width size')
