@@ -4,8 +4,15 @@ import argparse
 import numpy as np
 import tensorflow as tf
 from actions import Actions
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
 import warnings
 warnings.filterwarnings("ignore")
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+
+
 
 def configure():
     
