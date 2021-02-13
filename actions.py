@@ -21,7 +21,7 @@ class Actions(object):
         self.conv_size = (3, 3)
         self.pool_size = (2, 2)
         self.data_format = 'NHWC'
-        self.axis, self.channel_axis, self.batch_axis = (1, 2), 1, 0         # 3->1
+        self.axis, self.channel_axis, self.batch_axis = (1, 2), 3, 0
         
         self.input_shape = [conf.batchsize, conf.height, conf.width, conf.channel]
         self.output_shape = [conf.batchsize, conf.height, conf.width]
