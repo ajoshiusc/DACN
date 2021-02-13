@@ -5,15 +5,10 @@ import cv2
 import skimage.io as io
 import h5py
 import glob
-slices_list = []
-action = 'training'      #  valid training
-slices_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_tif/slices/*.tif')
+action = 'valid'      #  valid training
+slices_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_tif/slices/*.bmp')
 masks_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_tif/masks/*.bmp')
-for path in slices_path:
-    slice = np.array(Image.open(path))
-    slice = slice.reshape(*slice.shape, 1)
-    cv2.imwrite(path, slice)
-    slices_list.append(slice)
+slices_list = io.ImageCollection(slices_path)
 masks_list = io.ImageCollection(masks_path)
 print(slices_list[0].shape)
 print(masks_list[0].shape)

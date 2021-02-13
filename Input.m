@@ -2,7 +2,7 @@ clc;
 clear;
 
 
-action = 'training';       % 'training' 'valid' 'test'
+action = 'valid';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['../Dataset/', action, '_data/', action, '_data_nii/slices/'];
 train_test_data_masks =  ['../Dataset/', action, '_data/', action, '_data_nii/masks/'];
@@ -44,7 +44,9 @@ for num_nii = 3 : length(slices_nii_file)
     
 %% 
     slices_destination_path = ['../Dataset/', action, '_data/', action, '_data_tif/slices/'];
-    masks_destination_path = ['../Dataset/', action, '_data/', action, '_data_tif/masks/'];   
+    masks_destination_path = ['../Dataset/', action, '_data/', action, '_data_tif/masks/'];  
+    mkdir(slices_destination_path);
+    mkdir(masks_destination_path);
 %% classify into two categories    
     if max(max(max(slices_tif))) > 1220
         [slices_preprocessed, mask_preprocessed] = preprocessing_high(slices, masks, slices_destination_path, masks_destination_path, case_name, n1, n2, n3);
@@ -83,7 +85,6 @@ function [slices, mask] = preprocessing(slices, mask, slices_destination_path, m
     slices(slices < minimum) = minimum;
     slices(slices > maximum) = maximum;
     slices = (slices - minimum) ./ (maximum - minimum);
-    mkdir(masks_destination_path);
     save_preprocessed_images(slices, mask, slices_destination_path, masks_destination_path, prefix, n1, n2, n3);
 end
 
@@ -103,8 +104,9 @@ function [] = save_preprocessed_images(slices, mask, slices_destination_path, ma
         startSlice = max([1, (s - slicesPerImage + 1)]);
         imageSlices = slices(:, :, startSlice:(startSlice + slicesPerImage - 1));
         maskSlices = mask(:, :, startSlice:(startSlice + slicesPerImage - 1));
-        
-        saveastiff(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.tif']);
+        imageSlices = repmat(imageSlices,[1,1,3]);
+        %saveastiff(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.tif']);
+        imwrite(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp')
         imwrite(maskSlices, [masks_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp')
         
     end
