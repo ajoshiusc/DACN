@@ -6,7 +6,7 @@ import skimage.io as io
 import h5py
 import glob
 slices_list = []
-action = 'valid'      #  valid training
+action = 'training'      #  valid training
 slices_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_tif/slices/*.tif')
 masks_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_tif/masks/*.bmp')
 for path in slices_path:

@@ -164,6 +164,11 @@ class Actions(object):
            
             if epoch_num % self.conf.test_step == 1:
                 inputs, annotations = valid_reader.next_batch(self.conf.batchsize)
+
+                print(inputs.shape, annotations.shape)          ################################################################################
+
+
+
                 feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: False}
                 #loss, summary = self.sess.run([self.loss_op, self.valid_summary], feed_dict=feed_dict)
                 loss, accuracy, m_iou, _ = self.sess.run([self.loss_op, self.accuracy_op, self.m_iou, self.miou_op], feed_dict=feed_dict)
