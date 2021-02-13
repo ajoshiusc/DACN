@@ -2,7 +2,7 @@ clc;
 clear;
 
 
-action = 'training';       % 'training' 'valid' 'test'
+action = 'valid';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['../Dataset/', action, '_data/', action, '_data_nii/slices/'];
 train_test_data_masks =  ['../Dataset/', action, '_data/', action, '_data_nii/masks/'];
