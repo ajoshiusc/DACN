@@ -2,7 +2,7 @@ clc;
 clear;
 
 
-action = 'training';       % 'training' 'valid' 'test'
+action = 'valid';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['../Dataset/', action, '_data/', action, '_data_nii/slices/'];
 train_test_data_masks =  ['../Dataset/', action, '_data/', action, '_data_nii/masks/'];
@@ -83,7 +83,7 @@ function [slices, mask] = preprocessing(slices, mask, slices_destination_path, m
     slices(slices < minimum) = minimum;
     slices(slices > maximum) = maximum;
     slices = (slices - minimum) ./ (maximum - minimum);
-    mkdir(masks_destination_path);
+    mkdir('../Dataset/valid_data/valid_data_tif/masks/') 
     save_preprocessed_images(slices, mask, slices_destination_path, masks_destination_path, prefix, n1, n2, n3);
 end
 
