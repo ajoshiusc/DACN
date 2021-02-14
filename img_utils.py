@@ -1,6 +1,8 @@
-import scipy
-import scipy.misc
 import numpy as np
+import imageio
+
+
+
 
 def imsave(image, path):
     
@@ -12,6 +14,6 @@ def imsave(image, path):
         for k_, k in enumerate(j):
             if k < 2:
                 images[j_, k_] = label_colours[int(k)]
-    scipy.misc.imsave(path, images)
+    imageio.imwrite(path, images)
 
 
