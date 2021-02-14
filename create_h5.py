@@ -5,7 +5,7 @@ import cv2
 import skimage.io as io
 import h5py
 import glob
-action = 'valid'      #  valid training
+action = 'training'      #  valid training
 slices_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_bmp/slices/*.bmp')
 masks_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_bmp/masks/*.bmp')
 slices_list = io.ImageCollection(slices_path)

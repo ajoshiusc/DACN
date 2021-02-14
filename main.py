@@ -59,10 +59,10 @@ def configure():
     flags.DEFINE_boolean('is_training', True, '是否训练') 
     flags.DEFINE_integer('class_num', 2, 'output class number')
     #————————————————————————————-—————————————————————————#
-    flags.DEFINE_string('logdir', '../network4/logdir', 'Log dir')
-    flags.DEFINE_string('modeldir', '../network4/modeldir', 'Model dir')
-    flags.DEFINE_string('sample_dir', '../network4/samples/', 'Sample directory')
-    flags.DEFINE_string('record_dir', '../network4/record/', 'Experiment record directory')
+    flags.DEFINE_string('logdir', './network4/logdir', 'Log dir')
+    flags.DEFINE_string('modeldir', './network4/modeldir', 'Model dir')
+    flags.DEFINE_string('sample_dir', './network4/samples/', 'Sample directory')
+    flags.DEFINE_string('record_dir', './network4/record/', 'Experiment record directory')
     #————————————————————————————-—————————————————————————# 
     flags.DEFINE_boolean('use_asc', False, 'use ASC or not')
     flags.DEFINE_string('down_conv_name', 'conv2d', 'Use which conv op: conv2d, deform_conv2d, adaptive_conv2d, adaptive_separate_conv2d')

@@ -33,12 +33,10 @@ for num_nii = 3 : length(slices_nii_file)
     for i = 1 : n3 
         if i == 1
             slices = im2uint8(rescale(slices_tif(:,:,1), 0, 1));
-            masks = rescale(masks_tif(:,:,1), 0, 255);
-            masks(masks>0) = 1;
+            masks = 255*masks_tif(:,:,1);
         else
             single_slice = im2uint8(rescale(slices_tif(:,:,i), 0, 1));
-            single_mask = rescale(masks_tif(:,:,i), 0, 255);
-            single_mask(single_mask>0) = 1;
+            single_mask = 255*masks_tif(:,:,i);
             slices = cat(3, slices, single_slice); 
             masks = cat(3, masks, single_mask);
         end
@@ -107,10 +105,10 @@ function [] = save_preprocessed_images(slices, mask, slices_destination_path, ma
         imageSlices = slices(:, :, startSlice:(startSlice + slicesPerImage - 1));
         maskSlices = mask(:, :, startSlice:(startSlice + slicesPerImage - 1));
         imageSlices = repmat(imageSlices,[1,1,3]);
+        maskSlices(maskSlices==255) = 1;
         %saveastiff(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.tif']);
-        imwrite(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp')
-        imwrite(maskSlices, [masks_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp')
-        
+        imwrite(imageSlices, [slices_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp');       
+        imwrite(maskSlices, [masks_destination_path prefix '_' num2str(easy_sort + startSlice) '.bmp'], 'bmp');
     end
 
 end
