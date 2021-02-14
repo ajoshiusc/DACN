@@ -47,9 +47,9 @@ def configure():
     flags.DEFINE_string('data_dir', '../Dataset/h5py/', 'Name of data directory')
     flags.DEFINE_string('train_data', 'training_data.hdf5', 'Training data')
     flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
-    flags.DEFINE_string('test_data', 'pap_test.h5', 'Testing data')
+    flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')
     flags.DEFINE_integer('valid_num',1440,'the number of images in the validing set')
-    flags.DEFINE_integer('test_num',184,'the number of images in the testing set')  # add test data
+    flags.DEFINE_integer('test_num',2560,'the number of images in the testing set')  # add test data
     flags.DEFINE_integer('batch', 4, 'batch size')              # 4
     flags.DEFINE_integer('batchsize', 4, 'total batch size')     # 4
     flags.DEFINE_integer('channel', 3, 'channel size')        # changed channel from 3 to 1
