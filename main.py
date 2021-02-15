@@ -22,12 +22,12 @@ def configure():
     #————————————————————————————--—————————————————————————# 
     flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
-    flags.DEFINE_integer('max_epoch', 30000, '# of step in an epoch')
+    flags.DEFINE_integer('max_epoch', 300000, '# of step in an epoch')  # 30000
     flags.DEFINE_integer('test_step', 500, '# of step to test a model')
     flags.DEFINE_integer('save_step', 500, '# of step to save a model')
     
     flags.DEFINE_integer('valid_start_epoch',1,'start step to test a model')
-    flags.DEFINE_integer('valid_end_epoch',30001,'end step to test a model')
+    flags.DEFINE_integer('valid_end_epoch',300001,'end step to test a model')
     flags.DEFINE_integer('valid_stride_of_epoch',500,'stride to test a model')
     flags.DEFINE_string('model_name', 'model', 'Model file name')
     flags.DEFINE_integer('reload_epoch', 0, 'Reload epoch')
@@ -50,8 +50,8 @@ def configure():
     flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')
     flags.DEFINE_integer('valid_num',1440,'the number of images in the validing set')
     flags.DEFINE_integer('test_num',2560,'the number of images in the testing set')  # add test data
-    flags.DEFINE_integer('batch', 4, 'batch size')              # 4
-    flags.DEFINE_integer('batchsize', 4, 'total batch size')     # 4
+    flags.DEFINE_integer('batch', 10, 'batch size')              # 4
+    flags.DEFINE_integer('batchsize', 10, 'total batch size')     # 4
     flags.DEFINE_integer('channel', 3, 'channel size')        # changed channel from 3 to 1
     flags.DEFINE_integer('height', 256, 'height size')
     flags.DEFINE_integer('width', 256, 'width size')
