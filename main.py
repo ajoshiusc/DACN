@@ -22,7 +22,7 @@ def configure():
     #————————————————————————————--—————————————————————————# 
     flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
-    flags.DEFINE_integer('max_epoch', 300000, '# of step in an epoch')  # 30000
+    flags.DEFINE_integer('max_epoch', 100000, '# of step in an epoch')  # 30000
     flags.DEFINE_integer('test_step', 500, '# of step to test a model')
     flags.DEFINE_integer('save_step', 500, '# of step to save a model')
     
