@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import tensorflow as tf
 from actions import Actions
+from pretrainActions import Actions_pre
 from tensorflow.compat.v1 import ConfigProto
 from tensorflow.compat.v1 import InteractiveSession
 import warnings
@@ -22,13 +23,13 @@ def configure():
     #————————————————————————————--—————————————————————————# 
     flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
-    flags.DEFINE_integer('max_epoch', 100000, '# of step in an epoch')  # 30000
-    flags.DEFINE_integer('test_step', 500, '# of step to test a model')
-    flags.DEFINE_integer('save_step', 500, '# of step to save a model')
+    flags.DEFINE_integer('max_epoch', 100001, '# of step in an epoch')  # 30000
+    flags.DEFINE_integer('test_step', 1000, '# of step to test a model')
+    flags.DEFINE_integer('save_step', 1000, '# of step to save a model')
     
     flags.DEFINE_integer('valid_start_epoch',1,'start step to test a model')
-    flags.DEFINE_integer('valid_end_epoch',300001,'end step to test a model')
-    flags.DEFINE_integer('valid_stride_of_epoch',500,'stride to test a model')
+    flags.DEFINE_integer('valid_end_epoch',100001,'end step to test a model')
+    flags.DEFINE_integer('valid_stride_of_epoch',1000,'stride to test a model')
     flags.DEFINE_string('model_name', 'model', 'Model file name')
     flags.DEFINE_integer('reload_epoch', 0, 'Reload epoch')
     flags.DEFINE_integer('test_epoch', 26501, 'Test or predict epoch')
@@ -60,9 +61,13 @@ def configure():
     flags.DEFINE_integer('class_num', 2, 'output class number')
     #————————————————————————————-—————————————————————————#
     flags.DEFINE_string('logdir', './network4/logdir', 'Log dir')
+    flags.DEFINE_string('logdir_pretrain', './pre_network4/logdir', 'Log dir')
     flags.DEFINE_string('modeldir', './network4/modeldir', 'Model dir')
+    flags.DEFINE_string('modeldir_pretrain', './pre_network4/modeldir', 'Model dir')
     flags.DEFINE_string('sample_dir', './network4/samples/', 'Sample directory')
+    flags.DEFINE_string('sample_dir_pretrain', './pre_network4/samples/', 'Sample directory')
     flags.DEFINE_string('record_dir', './network4/record/', 'Experiment record directory')
+    flags.DEFINE_string('record_dir_pretrain', './pre_network4/record/', 'Experiment record directory')
     #————————————————————————————-—————————————————————————# 
     flags.DEFINE_boolean('use_asc', False, 'use ASC or not')
     flags.DEFINE_string('down_conv_name', 'conv2d', 'Use which conv op: conv2d, deform_conv2d, adaptive_conv2d, adaptive_separate_conv2d')
@@ -80,6 +85,7 @@ def configure():
 def train():
     model = Actions(sess, configure())
     model.train()
+
 #———————————————————————————— valid —————————————————————————#
 """
 函数功能：验证
@@ -105,6 +111,7 @@ def valid():
         print('valid_accuracy',valid_accuracy)
         print('valid_m_iou',valid_m_iou)
         print('valid_dice',valid_dice)
+
 #———————————————————————————— predict —————————————————————————#
 """
 函数功能：测试
@@ -121,6 +128,41 @@ def predict():
     print('predict_loss',predict_loss)
     print('predict_accuracy',predict_accuracy)
     print('predict_m_iou',predict_m_iou)
+
+##########################################################################################
+#                              pre-train
+##########################################################################################
+# ———————————————————————————— pre-train —————————————————————————#
+def pretrain():
+    model = Actions_pre(sess, configure())
+    model.train()
+
+# ———————————————————————————— pre-valid —————————————————————————#
+
+def prevalid():
+    valid_loss = []
+    valid_accuracy = []
+    valid_m_iou = []
+    valid_dice = []
+    conf = configure()
+    model = Actions_pre(sess, conf)
+    for i in range(conf.valid_start_epoch, conf.valid_end_epoch, conf.valid_stride_of_epoch):
+        loss, acc, m_iou, dice = model.test(i)
+        valid_loss.append(loss)
+        valid_accuracy.append(acc)
+        valid_m_iou.append(m_iou)
+        valid_dice.append(dice)
+        np.save(conf.record_dir_pretrain + "validate_loss.npy", np.array(valid_loss))
+        np.save(conf.record_dir_pretrain + "validate_accuracy.npy", np.array(valid_accuracy))
+        np.save(conf.record_dir_pretrain + "validate_m_iou.npy", np.array(valid_m_iou))
+        np.save(conf.record_dir_pretrain + "validate_dice.npy", np.array(valid_dice))
+        print('valid_loss', valid_loss)
+        print('valid_accuracy', valid_accuracy)
+        print('valid_m_iou', valid_m_iou)
+        print('valid_dice', valid_dice)
+##########################################################################################
+
+
 #———————————————————————————— main —————————————————————————#
 """
 函数功能：主函数，设置不同的action
@@ -133,7 +175,11 @@ def main(argv):
     args = parser.parse_args()
     if args.action not in ['train', 'test', 'predict']:
         print('invalid action: ', args.action)
-        print("Please input a action: train, test, or predict")
+        print("Please input a action: train, test, pretrain, pretest or predict")
+    elif args.action == 'pretrain':
+        pretrain()
+    elif args.action == 'pretest':
+        prevalid()
     # test
     elif args.action == 'test':
         valid()

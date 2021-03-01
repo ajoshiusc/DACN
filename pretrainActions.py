@@ -10,7 +10,8 @@ from acmdenseunet import AcmDenseUnet
 from ccv import CCV
 import ops
 
-class Actions(object):
+
+class Actions_pre(object):
 #—————————————————————————————————————————————————————#
     def __init__(self, sess, conf):
         
@@ -28,12 +29,12 @@ class Actions(object):
         
         
         #——————————————  step：2  ——————————————#
-        if not os.path.exists(conf.modeldir):
-            os.makedirs(conf.modeldir)
-        if not os.path.exists(conf.logdir):
-            os.makedirs(conf.logdir)
-        if not os.path.exists(conf.sample_dir):
-            os.makedirs(conf.sample_dir)
+        if not os.path.exists(conf.modeldir_pretrain):
+            os.makedirs(conf.modeldir_pretrain)
+        if not os.path.exists(conf.logdir_pretrain):
+            os.makedirs(conf.logdir_pretrain)
+        if not os.path.exists(conf.sample_dir_pretrain):
+            os.makedirs(conf.sample_dir_pretrain)
             
         #——————————————  step：3  ——————————————#
         if self.conf.gpu_num==1:
@@ -67,7 +68,8 @@ class Actions(object):
             self.outputs= tf.image.resize_bilinear(self.outputs, size=(self.output_shape[1],self.output_shape[2]), 
                                                        align_corners=True, name='loss/bilinear')
     
-        #——————————————  step：3  ——————————————#
+        # ——————————————  step：3  ——————————————#
+        # —————————————— loss  —————————————— #
         if self.conf.network_name=="unet" or self.conf.network_name=="denseunet":
             losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
@@ -77,19 +79,12 @@ class Actions(object):
             
             self.net_pred = self.outputs[:,:,:,2:]
             self.decoded_net_pred = tf.argmax(self.net_pred, self.channel_axis, name='accuracy/decode_net_pred')
-            losses1 = tf.losses.softmax_cross_entropy(one_hot_annotations, self.net_pred, scope='loss/losses1')
+            losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.net_pred, scope='loss/losses1')
             self.predicted_prob = tf.nn.softmax(self.net_pred, name='softmax')
             
-            # CCV 
-            self.pred = CCV(self.outputs, self.inputs, 2, 0.5, 1e-8)
-            
-            lambda1 = 0.01    
-            self.pred = tf.squeeze(self.pred)
-            losses2 = tf.reduce_sum(tf.square(self.pred-tf.cast(self.annotations,"float32")))
-            losses = lambda1*losses1+losses2
-            
-        #-----------------------------------------------------------------------------------------------------------------#
-        #——————————————  step：4  ——————————————#
+        # --------------------------------------------------------------------------------------------------------#
+        # ——————————————  step：4  —————————————— #
+
         self.loss_op = tf.reduce_mean(losses, name='loss/loss_op')
         optimizer = tf.train.AdamOptimizer(learning_rate=self.conf.learning_rate, 
                 beta1=self.conf.beta1, beta2=self.conf.beta2, epsilon=self.conf.epsilon)
@@ -133,7 +128,7 @@ class Actions(object):
         bn_moving_vars += [g for g in g_list if 'batch_norm/moving_variance' in g.name]
         trainable_vars += bn_moving_vars
         self.saver = tf.train.Saver(var_list=trainable_vars, max_to_keep=0)
-        self.writer = tf.summary.FileWriter(self.conf.logdir, self.sess.graph)
+        self.writer = tf.summary.FileWriter(self.conf.logdir_pretrain, self.sess.graph)
 
 #———————————————————————————— train —————————————————————————# 
     def train(self):
@@ -160,8 +155,6 @@ class Actions(object):
         self.sess.run(tf.local_variables_initializer())
        
         for epoch_num in range(self.conf.max_epoch):
-            
-           
             if epoch_num % self.conf.test_step == 1:
                 inputs, annotations = valid_reader.next_batch(self.conf.batchsize)
                 feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: False}
@@ -173,13 +166,13 @@ class Actions(object):
                 
                 # loss
                 valid_loss_list.append(loss)
-                np.save(self.conf.record_dir+"valid_loss.npy",np.array(valid_loss_list))
+                np.save(self.conf.record_dir_pretrain+"valid_loss.npy",np.array(valid_loss_list))
                 # acc
                 valid_acc_list.append(accuracy)
-                np.save(self.conf.record_dir+"valid_acc.npy",np.array(valid_acc_list))
+                np.save(self.conf.record_dir_pretrain+"valid_acc.npy",np.array(valid_acc_list))
                 # miou
                 valid_miou_list.append(m_iou)
-                np.save(self.conf.record_dir+"valid_miou.npy",np.array(valid_miou_list))
+                np.save(self.conf.record_dir_pretrain+"valid_miou.npy",np.array(valid_miou_list))
                 
                 #########################################################################
                 inputs, annotations = train_reader.next_batch(self.conf.batchsize)
@@ -190,13 +183,13 @@ class Actions(object):
                 
                 # loss
                 train_loss_list.append(loss)
-                np.save(self.conf.record_dir+"train_loss.npy",np.array(train_loss_list))
+                np.save(self.conf.record_dir_pretrain+"train_loss.npy",np.array(train_loss_list))
                 # acc
                 train_acc_list.append(accuracy)
-                np.save(self.conf.record_dir+"train_acc.npy",np.array(train_acc_list))
+                np.save(self.conf.record_dir_pretrain+"train_acc.npy",np.array(train_acc_list))
                 # miou
                 train_miou_list.append(m_iou)
-                np.save(self.conf.record_dir+"train_miou.npy",np.array(train_miou_list))
+                np.save(self.conf.record_dir_pretrain+"train_miou.npy",np.array(train_miou_list))
                 
             elif epoch_num % self.conf.summary_step == 1:
                 inputs, annotations = train_reader.next_batch(self.conf.batchsize)
@@ -318,10 +311,7 @@ class Actions(object):
             count+=1
             if count==self.conf.test_num:
                 break
-       
-        print('----->saving outputs')
-        print(np.shape(probabilitys))
-        np.save(self.conf.sample_dir+"outputs"+".npy",np.array(outputs))
+
                      
         print('----->saving predictions')
         print(np.shape(predictions))
@@ -329,9 +319,9 @@ class Actions(object):
         for index, prediction in enumerate(predictions):
            
             for i in range(prediction.shape[0]):
-                np.save(self.conf.sample_dir+"pred"+str(num)+".npy",prediction[i])
+                np.save(self.conf.sample_dir_pretrain+"pred"+str(num)+".npy",prediction[i])
                 num += 1
-                imsave(prediction[i], self.conf.sample_dir + str(index*prediction.shape[0]+i)+'.png')
+                imsave(prediction[i], self.conf.sample_dir_pretrain + str(index*prediction.shape[0]+i)+'.png')
                 
         print('----->saving net_predictions')
         print(np.shape(net_predictions))
@@ -339,9 +329,9 @@ class Actions(object):
         for index, prediction in enumerate(net_predictions):
            
             for i in range(prediction.shape[0]):
-                np.save(self.conf.sample_dir+"netpred"+str(num)+".npy",prediction[i])
+                np.save(self.conf.sample_dir_pretrain+"netpred"+str(num)+".npy",prediction[i])
                 num += 1
-                imsave(prediction[i], self.conf.sample_dir + str(index*prediction.shape[0]+i)+'net.png')
+                imsave(prediction[i], self.conf.sample_dir_pretrain + str(index*prediction.shape[0]+i)+'net.png')
        
         return np.mean(losses),np.mean(accuracies),m_ious[-1]
 #———————————————————————————— config_summary —————————————————————————#     
@@ -366,12 +356,12 @@ class Actions(object):
    
     def save(self, step):
         print('---->saving', step)
-        checkpoint_path = os.path.join(self.conf.modeldir, self.conf.model_name)
+        checkpoint_path = os.path.join(self.conf.modeldir_pretrain, self.conf.model_name)
         self.saver.save(self.sess, checkpoint_path, global_step=step)
 #———————————————————————————— reload —————————————————————————# 
    
     def reload(self, step):
-        checkpoint_path = os.path.join(self.conf.modeldir, self.conf.model_name)
+        checkpoint_path = os.path.join(self.conf.modeldir_pretrain, self.conf.model_name)
         model_path = checkpoint_path+'-'+str(step)
         if not os.path.exists(model_path+'.meta'):
             print('------- no such checkpoint', model_path)
