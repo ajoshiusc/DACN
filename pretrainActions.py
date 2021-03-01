@@ -81,7 +81,9 @@ class Actions_pre(object):
             self.decoded_net_pred = tf.argmax(self.net_pred, self.channel_axis, name='accuracy/decode_net_pred')
             losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.net_pred, scope='loss/losses1')
             self.predicted_prob = tf.nn.softmax(self.net_pred, name='softmax')
-            self.pred = tf.squeeze(self.net_pred)
+            # CCV
+            self.pred = CCV(self.outputs, self.inputs, 2, 0.5, 1e-8)
+            self.pred = tf.squeeze(self.pred)
             
         # --------------------------------------------------------------------------------------------------------#
         # ——————————————  step：4  —————————————— #
