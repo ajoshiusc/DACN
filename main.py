@@ -160,6 +160,20 @@ def prevalid():
         print('valid_accuracy', valid_accuracy)
         print('valid_m_iou', valid_m_iou)
         print('valid_dice', valid_dice)
+
+#———————————————————————————— predict —————————————————————————#
+def prepredict():
+    predict_loss = []
+    predict_accuracy = []
+    predict_m_iou = []
+    model = Actions_pre(sess, configure())
+    loss,acc,m_iou = model.predict()
+    predict_loss.append(loss)
+    predict_accuracy.append(acc)
+    predict_m_iou.append(m_iou)
+    print('predict_loss',predict_loss)
+    print('predict_accuracy',predict_accuracy)
+    print('predict_m_iou',predict_m_iou)
 ##########################################################################################
 
 
@@ -173,13 +187,15 @@ def main(argv):
     parser.add_argument('--action', dest='action', type=str, default='train',
                         help='actions: train, test, or predict')
     args = parser.parse_args()
-    if args.action not in ['train', 'test', 'predict', 'pretrain', 'pretest']:
+    if args.action not in ['train', 'test', 'predict', 'pretrain', 'pretest', 'prepredict']:
         print('invalid action: ', args.action)
         print("Please input a action: train, test, pretrain, pretest or predict")
     elif args.action == 'pretrain':
         pretrain()
     elif args.action == 'pretest':
         prevalid()
+    elif args.action == 'prepredict':
+        prepredict()
     # test
     elif args.action == 'test':
         valid()
