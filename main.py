@@ -173,7 +173,7 @@ def main(argv):
     parser.add_argument('--action', dest='action', type=str, default='train',
                         help='actions: train, test, or predict')
     args = parser.parse_args()
-    if args.action not in ['train', 'test', 'predict']:
+    if args.action not in ['train', 'test', 'predict', 'pretrain', 'pretest']:
         print('invalid action: ', args.action)
         print("Please input a action: train, test, pretrain, pretest or predict")
     elif args.action == 'pretrain':
