@@ -209,8 +209,7 @@ class Actions_pre(object):
                 inputs, annotations = train_reader.next_batch(self.conf.batchsize)
                 feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: True}
                 loss,_ = self.sess.run([self.loss_op, self.train_op], feed_dict=feed_dict)
-                
-                print(epoch_num)
+
             
            
             if epoch_num % self.conf.save_step == 1:
