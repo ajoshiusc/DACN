@@ -104,7 +104,7 @@ class Actions_pre(object):
         
         #——————————————  step：5  ——————————————#
         self.predictions = self.pred
-        #self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')
+        self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')         #     this
         
         gamma = 0.5
         high0 = tf.ones(self.annotations.shape,"int64")
