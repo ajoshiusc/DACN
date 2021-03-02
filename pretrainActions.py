@@ -383,7 +383,7 @@ class Actions_pre(object):
         self.saver.restore(self.sess, model_path)
 
 # ----dice coef  #
-    def dice_coef(y_true, y_pred):
+    def dice_coef(self, y_true, y_pred):
         y_true_f = K.flatten(y_true)
         y_pred_f = K.flatten(y_pred)
         intersection = K.sum(y_true_f * y_pred_f)
