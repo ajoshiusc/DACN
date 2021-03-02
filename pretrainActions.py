@@ -113,8 +113,9 @@ class Actions_pre(object):
         high0 = tf.ones(self.annotations.shape,"int64")
         low0 = tf.zeros(self.annotations.shape,"int64")
         gamma0 = tf.ones(self.annotations.shape)*gamma
-        self.decoded_predictions = tf.where(tf.greater_equal(self.predictions,gamma0), high0, low0)
-            
+        #self.decoded_predictions = tf.where(tf.greater_equal(self.predictions,gamma0), high0, low0)
+        self.decoded_predications = self.pred
+
         correct_prediction = tf.equal(self.annotations, self.decoded_predictions, name='accuracy/correct_pred')
         self.accuracy_op = tf.reduce_mean(tf.cast(correct_prediction, tf.float32, name='accuracy/cast'),
             name='accuracy/accuracy_op')
