@@ -64,6 +64,11 @@ class Actions_pre(object):
        
         shape1 = one_hot_annotations.shape
         shape2 = self.outputs.shape
+
+        print("one_hot_annotations shape", shape1)
+        print("output shape", shape2)
+        
+
         if shape1[1].value!=shape2[1].value or shape1[2].value!=shape2[2].value:
             self.outputs= tf.image.resize_bilinear(self.outputs, size=(self.output_shape[1],self.output_shape[2]), 
                                                        align_corners=True, name='loss/bilinear')
@@ -104,7 +109,7 @@ class Actions_pre(object):
         
         #——————————————  step：5  ——————————————#
         self.predictions = self.pred
-        self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')         #     this
+        #self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')         #     this
         
         gamma = 0.5
         high0 = tf.ones(self.annotations.shape,"int64")
