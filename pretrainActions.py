@@ -76,8 +76,9 @@ class Actions_pre(object):
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
             #### modified
             self.pred = self.outputs
+            print("pred shape before squeeze: ", self.pred.shape)
             self.pred = tf.squeeze(self.pred[:, :, :, 2:])
-
+            print("pred shape after squeeze: ", self.pred.shape)
 
         if self.conf.network_name=="acmdenseunet":
             
