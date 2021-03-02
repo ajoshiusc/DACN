@@ -21,7 +21,7 @@ def configure():
     flags = tf.app.flags
     
     #————————————————————————————--—————————————————————————# 
-    flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
+    flags.DEFINE_string('network_name', 'denseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
     flags.DEFINE_integer('max_epoch', 50001, '# of step in an epoch')  # 30000
     flags.DEFINE_integer('test_step', 500, '# of step to test a model')

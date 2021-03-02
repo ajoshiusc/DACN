@@ -74,16 +74,22 @@ class Actions_pre(object):
             losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
             self.pred = self.outputs
-            
+
+
         if self.conf.network_name=="acmdenseunet":
             
             self.net_pred = self.outputs[:,:,:,2:]
             self.decoded_net_pred = tf.argmax(self.net_pred, self.channel_axis, name='accuracy/decode_net_pred')
-            losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.net_pred, scope='loss/losses1')
+            losses1 = tf.losses.softmax_cross_entropy(one_hot_annotations, self.net_pred, scope='loss/losses1')
             self.predicted_prob = tf.nn.softmax(self.net_pred, name='softmax')
+
             # CCV
             self.pred = CCV(self.outputs, self.inputs, 2, 0.5, 1e-8)
+
+            lambda1 = 0.01
             self.pred = tf.squeeze(self.pred)
+            losses2 = tf.reduce_sum(tf.square(self.pred - tf.cast(self.annotations, "float32")))
+            losses = lambda1 * losses1 + losses2
             
         # --------------------------------------------------------------------------------------------------------#
         # ——————————————  step：4  —————————————— #
