@@ -8,6 +8,7 @@ from img_utils import imsave
 from denseunet import DenseUnet
 from acmdenseunet import AcmDenseUnet
 from ccv import CCV
+from keras import backend as K
 import ops
 
 
@@ -72,7 +73,8 @@ class Actions_pre(object):
         # ——————————————  step：3  ——————————————#
         # —————————————— loss  —————————————— #
         if self.conf.network_name=="unet" or self.conf.network_name=="denseunet":
-            losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
+            #losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
+            losses = -self.dice_coef(one_hot_annotations, self.outputs)
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
 
             ### modified
@@ -379,3 +381,10 @@ class Actions_pre(object):
             print('------- no such checkpoint', model_path)
             return
         self.saver.restore(self.sess, model_path)
+
+# ----dice coef  #
+    def dice_coef(y_true, y_pred):
+        y_true_f = K.flatten(y_true)
+        y_pred_f = K.flatten(y_pred)
+        intersection = K.sum(y_true_f * y_pred_f)
+        return (2. * intersection + 1.0) / (K.sum(y_true_f) + K.sum(y_pred_f) + 1.0)
