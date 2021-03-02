@@ -65,10 +65,6 @@ class Actions_pre(object):
         shape1 = one_hot_annotations.shape
         shape2 = self.outputs.shape
 
-        print("one_hot_annotations shape", shape1)
-        print("output shape", shape2)
-        
-
         if shape1[1].value!=shape2[1].value or shape1[2].value!=shape2[2].value:
             self.outputs= tf.image.resize_bilinear(self.outputs, size=(self.output_shape[1],self.output_shape[2]), 
                                                        align_corners=True, name='loss/bilinear')
@@ -78,7 +74,9 @@ class Actions_pre(object):
         if self.conf.network_name=="unet" or self.conf.network_name=="denseunet":
             losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
+            #### modified
             self.pred = self.outputs
+            self.pred = tf.squeeze(self.pred[:, :, :, 2:])
 
 
         if self.conf.network_name=="acmdenseunet":
