@@ -74,11 +74,8 @@ class Actions_pre(object):
         if self.conf.network_name=="unet" or self.conf.network_name=="denseunet":
             losses = tf.losses.softmax_cross_entropy(one_hot_annotations, self.outputs, scope='loss/losses')
             self.decoded_net_pred = tf.argmax(self.outputs, self.channel_axis, name='accuracy/decode_net_pred')
-            #### modified
-            self.pred = self.outputs
-            print("pred shape before squeeze: ", self.pred.shape)
-            self.pred = tf.squeeze(self.pred[:, :, :, 2:])
-            print("pred shape after squeeze: ", self.pred.shape)
+            print(" self.decoded_net_pred shape:",  self.decoded_net_pred.shape)
+
 
         if self.conf.network_name=="acmdenseunet":
             
