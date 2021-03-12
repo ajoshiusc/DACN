@@ -4,32 +4,23 @@ import argparse
 import numpy as np
 import tensorflow as tf
 from actions import Actions
-from tensorflow.compat.v1 import ConfigProto
-from tensorflow.compat.v1 import InteractiveSession
-import warnings
-warnings.filterwarnings("ignore")
-config = ConfigProto()
-config.gpu_options.allow_growth = True
-session = InteractiveSession(config=config)
-
-
 def configure():
 
     flags = tf.app.flags
     
     #————————————————————————————--—————————————————————————# 
-    flags.DEFINE_string('network_name', 'denseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
+    flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
-    flags.DEFINE_integer('max_epoch', 10001, '# of step in an epoch')  # 30000
+    flags.DEFINE_integer('max_epoch', 50001, '# of step in an epoch')  # 30000
     flags.DEFINE_integer('test_step', 500, '# of step to test a model')
     flags.DEFINE_integer('save_step', 500, '# of step to save a model')
     
     flags.DEFINE_integer('valid_start_epoch', 1,'start step to test a model')
-    flags.DEFINE_integer('valid_end_epoch', 10001, 'end step to test a model')
+    flags.DEFINE_integer('valid_end_epoch', 50001, 'end step to test a model')
     flags.DEFINE_integer('valid_stride_of_epoch',500, 'stride to test a model')
     flags.DEFINE_string('model_name', 'model', 'Model file name')
     flags.DEFINE_integer('reload_epoch', 0, 'Reload epoch')
-    flags.DEFINE_integer('test_epoch', 8001, 'Test or predict epoch')
+    flags.DEFINE_integer('test_epoch', 19501, 'Test or predict epoch')
     flags.DEFINE_integer('random_seed', int(time.time()), 'random seed')
     
     flags.DEFINE_integer('summary_step', 10000000, '# of step to save the summary')
@@ -45,25 +36,23 @@ def configure():
     flags.DEFINE_string('data_dir', '../Dataset/h5py/', 'Name of data directory')
     flags.DEFINE_string('train_data', 'training_data.hdf5', 'Training data')
     flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
-    flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')
-    flags.DEFINE_integer('valid_num',1440,'the number of images in the validing set')
-    flags.DEFINE_integer('test_num',2560,'the number of images in the testing set')  # add test data
-    flags.DEFINE_integer('batch', 4, 'batch size')              # 4
-    flags.DEFINE_integer('batchsize', 4, 'total batch size')     # 4
-    flags.DEFINE_integer('channel', 3, 'channel size')        # changed channel from 3 to 1
+    flags.DEFINE_string('test_data', 'test_data_brainsuite.hdf5', 'Testing data')
+    flags.DEFINE_integer('valid_num',3840,'the number of images in the validing set')
+    flags.DEFINE_integer('test_num',2400,'the number of images in the testing set')  # add test data
+    flags.DEFINE_integer('batch', 8, 'batch size')              # 4
+    flags.DEFINE_integer('batchsize', 8, 'total batch size')     # 4
+    flags.DEFINE_integer('channel', 3, 'channel size')
     flags.DEFINE_integer('height', 256, 'height size')
     flags.DEFINE_integer('width', 256, 'width size')
     flags.DEFINE_boolean('is_training', True, '是否训练') 
     flags.DEFINE_integer('class_num', 2, 'output class number')
     #————————————————————————————-—————————————————————————#
-    flags.DEFINE_string('logdir', '../network4/logdir', 'Log dir')
-    flags.DEFINE_string('logdir_pretrain', '../pre_network4/logdir', 'Log dir')
-    flags.DEFINE_string('modeldir', '../network4/modeldir', 'Model dir')
-    flags.DEFINE_string('modeldir_pretrain', '../pre_network4/modeldir', 'Model dir')
+    flags.DEFINE_string('network_dir', '../network4/', 'network_dir')
+    flags.DEFINE_string('logdir', '../network4/logdir/', 'Log dir')
+    flags.DEFINE_string('modeldir', '../network4/modeldir/', 'Model dir')
     flags.DEFINE_string('sample_dir', '../network4/samples/', 'Sample directory')
-    flags.DEFINE_string('sample_dir_pretrain', '../pre_network4/samples/', 'Sample directory')
+    flags.DEFINE_string('sample_net_dir', '../network4/samples_net/', 'Sample directory')
     flags.DEFINE_string('record_dir', '../network4/record/', 'Experiment record directory')
-    flags.DEFINE_string('record_dir_pretrain', '../pre_network4/record/', 'Experiment record directory')
     #————————————————————————————-—————————————————————————# 
     flags.DEFINE_boolean('use_asc', False, 'use ASC or not')
     flags.DEFINE_string('down_conv_name', 'conv2d', 'Use which conv op: conv2d, deform_conv2d, adaptive_conv2d, adaptive_separate_conv2d')
@@ -125,15 +114,15 @@ def valid():
 def predict():
     predict_loss = []
     predict_accuracy = []
-    predict_m_iou = []
+    predict_dice = []
     model = Actions(sess, configure())
-    loss, acc, m_iou = model.predict()
+    loss, acc, dice = model.predict()
     predict_loss.append(loss)
     predict_accuracy.append(acc)
-    predict_m_iou.append(m_iou)
+    predict_dice.append(dice)
     print('predict_loss', predict_loss)
     print('predict_accuracy', predict_accuracy)
-    print('predict_m_iou', predict_m_iou)
+    print('predict_dice', predict_dice)
 
 
 # ———————————————————————————— main —————————————————————————#
@@ -167,6 +156,7 @@ def main(argv):
 # ———————————————————————————— GPU设置 —————————————————————————#
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
     config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
     config.gpu_options.allow_growth = True
     sess = tf.Session(config=config)

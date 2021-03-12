@@ -3,7 +3,7 @@ clear;
 
 % masks' path
 masks_path = '../Dataset/test_data/test_data_bmp/masks/';
-preds_path = '../pred_results/';
+preds_path = '../network4/samples_net/';
 final_preds_path = '../png_pred_results/';
 masks_folder=dir(masks_path);
 masks_file= {masks_folder.name};
@@ -25,7 +25,11 @@ for num_masks = 3 : length(masks_file)
     
     mask = logical(mask);
     pred = logical(pred);
-    dice_coeff =  2*nnz(mask&pred)/(nnz(mask) + nnz(pred)+0.000001);
+    if((nnz(mask)== 0) && (nnz(pred)==0))
+        dice_coeff = 1;
+    else
+        dice_coeff =  2*nnz(mask&pred)/(nnz(mask) + nnz(pred)+0.000001);
+    end
     dice(num_masks-2) = dice_coeff;
        
 end

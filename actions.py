@@ -38,6 +38,10 @@ class Actions(object):
             os.makedirs(conf.logdir)
         if not os.path.exists(conf.sample_dir):
             os.makedirs(conf.sample_dir)
+        if not os.path.exists(conf.sample_net_dir):
+            os.makedirs(conf.sample_net_dir)
+        if not os.path.exists(conf.record_dir):
+            os.makedirs(conf.record_dir)
 
         # ——————————————  step：3  ——————————————#
         if self.conf.gpu_num == 1:
@@ -154,6 +158,9 @@ class Actions(object):
         valid_loss_list = []
         train_loss_list = []
 
+        train_dice_list = []
+        valid_dice_list = []
+
         train_acc_list = []
         valid_acc_list = []
 
@@ -171,12 +178,19 @@ class Actions(object):
                 loss, accuracy, m_iou, _ = self.sess.run([self.loss_op, self.accuracy_op, self.m_iou, self.miou_op],
                                                          feed_dict=feed_dict)
                 # self.save_summary(summary, epoch_num)
-
+                out, gt = self.sess.run([self.out, self.gt], feed_dict=feed_dict)
+                if self.conf.class_num == 2:
+                    tp = np.sum(out * gt)
+                    fenmu = np.sum(out) + np.sum(gt) + 0.000001
+                    dice = 2 * tp / fenmu
                 print(epoch_num, '----valid loss', loss)
-
+                print(epoch_num, '----valid dice', dice)
                 # loss
                 valid_loss_list.append(loss)
                 np.save(self.conf.record_dir + "valid_loss.npy", np.array(valid_loss_list))
+                # dice
+                valid_dice_list.append(dice)
+                np.save(self.conf.record_dir + "valid_dice.npy", np.array(valid_dice_list))
                 # acc
                 valid_acc_list.append(accuracy)
                 np.save(self.conf.record_dir + "valid_acc.npy", np.array(valid_acc_list))
@@ -189,12 +203,19 @@ class Actions(object):
                 feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: True}
                 haha, loss, accuracy, m_iou, _ = self.sess.run(
                     [self.train_op, self.loss_op, self.accuracy_op, self.m_iou, self.miou_op], feed_dict=feed_dict)
-
+                out, gt = self.sess.run([self.out, self.gt], feed_dict=feed_dict)
+                if self.conf.class_num == 2:
+                    tp = np.sum(out * gt)
+                    fenmu = np.sum(out) + np.sum(gt) + 0.000001
+                    dice = 2 * tp / fenmu
                 print(epoch_num, '----train loss', loss)
-
+                print(epoch_num, '----train dice', dice)
                 # loss
                 train_loss_list.append(loss)
                 np.save(self.conf.record_dir + "train_loss.npy", np.array(train_loss_list))
+                # dice
+                train_dice_list.append(dice)
+                np.save(self.conf.record_dir + "train_dice.npy", np.array(train_dice_list))
                 # acc
                 train_acc_list.append(accuracy)
                 np.save(self.conf.record_dir + "train_acc.npy", np.array(train_acc_list))
@@ -217,7 +238,7 @@ class Actions(object):
                 feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: True}
                 loss, _ = self.sess.run([self.loss_op, self.train_op], feed_dict=feed_dict)
 
-                print(epoch_num)
+
 
             if epoch_num % self.conf.save_step == 1:
                 self.save(epoch_num)
@@ -251,7 +272,7 @@ class Actions(object):
             feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: False}
             loss, accuracy, m_iou, _ = self.sess.run([self.loss_op, self.accuracy_op, self.m_iou, self.miou_op],
                                                      feed_dict=feed_dict)
-            print(count)
+
             print('values----->', loss, accuracy, m_iou)
             losses.append(loss)
             accuracies.append(accuracy)
@@ -291,58 +312,63 @@ class Actions(object):
         outputs = []
         probabilitys = []
         losses = []
+        dices = []
         accuracies = []
-        m_ious = []
         count = 0
 
         while True:
             inputs, annotations = test_reader.next_batch(self.conf.batchsize)
-
             if inputs.shape[0] < self.conf.batch:
                 break
 
             feed_dict = {self.inputs: inputs, self.annotations: annotations, self.is_train: False}
-            loss, accuracy, m_iou, _ = self.sess.run([self.loss_op, self.accuracy_op, self.m_iou, self.miou_op],
+            loss, accuracy, _, _ = self.sess.run([self.loss_op, self.accuracy_op, self.m_iou, self.miou_op],
                                                      feed_dict=feed_dict)
-            print('values----->', loss, accuracy, m_iou)
+            out, gt = self.sess.run([self.out, self.gt], feed_dict=feed_dict)
+            if self.conf.class_num == 2:
+                tp = np.sum(out * gt)
+                fenmu = np.sum(out) + np.sum(gt) + 0.000001
+                dice = 2 * tp / fenmu
+                dices.append(dice)
 
             losses.append(loss)
+            dices.append(dice)
             accuracies.append(accuracy)
-            m_ious.append(m_iou)
 
-            predictions.append(self.sess.run(self.decoded_predictions, feed_dict=feed_dict))
+            # predictions.append(self.sess.run(self.decoded_predictions, feed_dict=feed_dict))
             net_predictions.append(self.sess.run(self.decoded_net_pred, feed_dict=feed_dict))
-            outputs.append(self.sess.run(self.outputs, feed_dict=feed_dict))
+            # outputs.append(self.sess.run(self.outputs, feed_dict=feed_dict))
 
             count += 1
+            print(count, 'values----->', loss, accuracy, dice)
             if count == self.conf.test_num:
                 break
 
-        print('----->saving outputs')
         print(np.shape(probabilitys))
-        np.save(self.conf.sample_dir + "outputs" + ".npy", np.array(outputs))
-
+        #np.save(self.conf.sample_dir + "outputs" + ".npy", np.array(outputs))
+        """
         print('----->saving predictions')
         print(np.shape(predictions))
+        
         num = 0
         for index, prediction in enumerate(predictions):
 
             for i in range(prediction.shape[0]):
-                np.save(self.conf.sample_dir + "pred" + str(num) + ".npy", prediction[i])
+                #np.save(self.conf.sample_dir + "pred" + str(num) + ".npy", prediction[i])
                 num += 1
                 imsave(prediction[i], self.conf.sample_dir + str(index * prediction.shape[0] + i) + '.png')
-
+        """
         print('----->saving net_predictions')
         print(np.shape(net_predictions))
         num = 0
         for index, prediction in enumerate(net_predictions):
 
             for i in range(prediction.shape[0]):
-                np.save(self.conf.sample_dir + "netpred" + str(num) + ".npy", prediction[i])
+                #np.save(self.conf.sample_net_dir + str(num) + ".npy", prediction[i])
                 num += 1
-                imsave(prediction[i], self.conf.sample_dir + str(index * prediction.shape[0] + i) + 'net.png')
+                imsave(prediction[i], self.conf.sample_net_dir + str(index * prediction.shape[0] + i) + '.png')
 
-        return np.mean(losses), np.mean(accuracies), m_ious[-1]
+        return np.mean(losses), np.mean(dices), np.mean(dices)
 
     # ———————————————————————————— config_summary —————————————————————————#
 
