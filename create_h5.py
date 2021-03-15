@@ -1,7 +1,3 @@
-import os
-import numpy as np
-from PIL import Image
-import cv2
 import skimage.io as io
 import h5py
 import glob
@@ -9,6 +5,7 @@ action = 'test'      #  valid training test
 slices_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_bmp/slices/*.bmp')
 masks_path = glob.glob('../Dataset/' + action + '_data/' + action + '_data_bmp/masks/*.bmp')
 slices_list = io.ImageCollection(slices_path)
+print(slices_list)
 masks_list = io.ImageCollection(masks_path)
 print(slices_list[0].shape)
 print(masks_list[0].shape)

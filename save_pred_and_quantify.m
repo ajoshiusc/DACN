@@ -14,13 +14,19 @@ for num_masks = 3 : length(masks_file)
     mask_name = masks_file(num_masks);
    	mask = imread([masks_path char(mask_name)]);
     pred_path_name = [preds_path, num2str(i), '.png'];
-    pred = im2gray(imread(pred_path_name)); 
+    %%%%%%
+    pred = im2gray(imread(pred_path_name));
+    pred = imbinarize(pred); 
+    %pred = bwareaopen(pred, 50);
+    pred = imfill(pred, 'holes');
+   
     case_name = char(mask_name);
     case_name = case_name(1:end-10);
     if exist([final_preds_path case_name, '/'],'dir')==0
         mkdir([final_preds_path case_name, '/']);
     end
     imwrite(pred, [final_preds_path case_name, '/', char(mask_name)]);
+    disp([final_preds_path case_name, '/', char(mask_name)]);
     i = i+1;
     
     mask = logical(mask);

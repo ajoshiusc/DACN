@@ -1,19 +1,19 @@
 clc;
 clear;
 
-prediction_path = '../net_preds_results/';
-save_path = '../pred_nii/';
+prediction_path = '../png_pred_results/';
+save_path = '../pred_nii_bsdata/dl_pred_nii/';
 pred_folder= dir(prediction_path);
 pred_file={pred_folder.name};
 
-for num_pred= 4 : length(pred_file)
+for num_pred= 3 : length(pred_file)
     case_name = pred_file(num_pred);
     case_name = char(case_name);
     finishing = [num2str(num_pred-3),'/',num2str(length(pred_file)-3)];
     disp(finishing)
     disp(case_name)
     
-    v_orig = load_nii(['../Dataset/test_data/test_data_nii/slices/', case_name, '.nii.gz']);
+    v_orig = load_untouch_nii(['../Dataset/test_data/test_data_nii/slices/', case_name, '.nii.gz']);
     v2 = v_orig;
     v3 = v_orig;
     v4 = v_orig;
@@ -35,13 +35,14 @@ for num_pred= 4 : length(pred_file)
     %% Pred Part
     for j = 1 : a3
         if j == 1
-            preds = im2gray(imread([prediction_path case_name, '/', case_name,'_', num2str(10001), '.bmp' ]));
+            preds = imread([prediction_path, case_name, '/', case_name,'_', num2str(10001), '.bmp' ]);
+            %preds = im2gray(preds);
             masks = imread(['../Dataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10001), '.bmp' ]);
             
             preds = get_original_size(preds, a1, a2);
             masks = get_original_size(masks, a1, a2);
         else
-            single_pred = im2gray(imread([prediction_path case_name, '/', case_name,'_', num2str(10000+j), '.bmp' ]));
+            single_pred = imread([prediction_path case_name, '/', case_name,'_', num2str(10000+j), '.bmp' ]);
             single_mask = imread(['../Dataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10000+j), '.bmp' ]);
             
             single_pred = get_original_size(single_pred, a1, a2);
@@ -66,9 +67,9 @@ for num_pred= 4 : length(pred_file)
     if exist([save_path, case_name, '/'],'dir')==0
         mkdir([save_path, case_name, '/']);
     end
-    save_nii(v2, [save_path, case_name, '/', case_name, '_image.nii']);
-    save_nii(v3, [save_path, case_name, '/', case_name, '_pred.nii']);
-    save_nii(v4, [save_path, case_name, '/', case_name, '_mask.nii']);
+    save_untouch_nii(v2, [save_path, case_name, '/', case_name, '_image.nii']);
+    save_untouch_nii(v3, [save_path, case_name, '/', case_name, '_pred.nii']);
+    save_untouch_nii(v4, [save_path, case_name, '/', case_name, '_mask.nii']);
 
 end
 

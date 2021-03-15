@@ -12,7 +12,7 @@ valid_acc = np.load(train_npy_path + "valid_acc.npy")
 valid_dice = np.load(train_npy_path + "valid_dice.npy")
 
 
-epoch = np.arange(1, 20001, 500)
+epoch = np.arange(1, 100001, 1000)
 
 plt.plot(epoch, training_loss)
 plt.plot(epoch, valid_loss)

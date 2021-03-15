@@ -368,7 +368,7 @@ class Actions(object):
                 num += 1
                 imsave(prediction[i], self.conf.sample_net_dir + str(index * prediction.shape[0] + i) + '.png')
 
-        return np.mean(losses), np.mean(dices), np.mean(dices)
+        return np.mean(losses), np.mean(accuracies), np.mean(dices)
 
     # ———————————————————————————— config_summary —————————————————————————#
 
