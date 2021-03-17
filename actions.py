@@ -108,8 +108,8 @@ class Actions(object):
 
         # ——————————————  step：5  ——————————————#
         self.predictions = self.pred
-        # self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')
-
+        self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')   # for net only
+        """
         gamma = 0.5
         high0 = tf.ones(self.annotations.shape, "int64")
         low0 = tf.zeros(self.annotations.shape, "int64")
@@ -124,7 +124,7 @@ class Actions(object):
                           tf.int32, name='m_iou/weights')
         self.m_iou, self.miou_op = tf.metrics.mean_iou(self.annotations, self.decoded_predictions, self.conf.class_num,
                                                        weights, name='m_iou/m_ious')
-
+        """
         self.out = tf.cast(self.decoded_predictions, tf.float32)
         self.gt = tf.cast(self.annotations, tf.float32)
 
