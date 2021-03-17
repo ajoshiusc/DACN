@@ -5,7 +5,7 @@ Deep Active Contour Network for Medical Image Segmentation
 - Tensorflow 1.x
  
 ## Usage
-# Prepare training/valid/test data
+### Prepare training/valid/test data
 1. Put '.nii' format data into directory as the following file structure:  
 ```
 Dataset  
