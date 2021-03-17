@@ -31,19 +31,27 @@ Dataset
 ```  
 2.  run ``` input.m ``` to slice the volumn into 2d image.  
 3.  run ``` create_h5py.py ``` to convert dataset into hdf5 file.  
-4.   train： ``` python main.py ```
-     valid： ``` python main.py --action=test ```
-     predict： ``` python main.py --action=predict ```
+4.  train： ``` python main.py ```  
+    valid： ``` python main.py --action=test ```  
+    predict： ``` python main.py --action=predict ```  
+5.  run ``` save_pred_and_quantify.m ``` to convert the prediction results into different folders according to different volume.  
+6.  run ``` save_results.m ``` to convert 2d results into 3d volumes.  
 
+## Results  
 test on brainsuite data:  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/result_bs.png)  
 
 
 test on CC-359 dataset:   
-![image](https://github.com/yanlong-sun/DACN/blob/main/result_cc.png)
+![image](https://github.com/yanlong-sun/DACN/blob/main/result_cc.png)  
 
-Dense Unet Structure
-![image](https://github.com/yanlong-sun/DACN/blob/main/Dense%20Unet%20Structure.png)
+## Network structure  
+### Dense Unet Structure  
+![image](https://github.com/yanlong-sun/DACN/blob/main/Dense%20Unet%20Structure.png)  
 
-DACN Structure
+### DACN Structure  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/DACN%20Structure.png)
+
+## Training data we used are as following:
+- Training data : 
+         CC0001 - CC0015, CC0110-CC0134, CC0230-CC0254, CC0350-CC0359 
