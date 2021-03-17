@@ -6,8 +6,8 @@ Deep Active Contour Network for Medical Image Segmentation
  
 ## Usage
 # Prepare training/valid/test data
-1. Put '.nii' format data into directory as the following file structure:
-'''
+1. Put '.nii' format data into directory as the following file structure:  
+```
 Dataset  
     └── training_data  
             ├── training_data_nii  
@@ -28,12 +28,12 @@ Dataset
             │      └── masks  
             │             └── 5254HD.manual.mask.nii.gz...    
         ...  
-'''  
-2.  run ''' input.m ''' to slice the volumn into 2d image.  
-3.  run ''' create_h5py.py ''' to convert dataset into hdf5 file.  
-4.   train： ''' python main.py '''
-     valid： ''' python main.py --action=test '''
-     predict： ''' python main.py --action=predict '''
+```  
+2.  run ``` input.m ``` to slice the volumn into 2d image.  
+3.  run ``` create_h5py.py ``` to convert dataset into hdf5 file.  
+4.   train： ``` python main.py ```
+     valid： ``` python main.py --action=test ```
+     predict： ``` python main.py --action=predict ```
 
 test on brainsuite data:  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/result_bs.png)  
