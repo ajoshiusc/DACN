@@ -9,7 +9,7 @@ def configure():
     flags = tf.app.flags
     
     #————————————————————————————--—————————————————————————# 
-    flags.DEFINE_string('network_name', 'acmdenseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
+    flags.DEFINE_string('network_name', 'denseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
     flags.DEFINE_integer('max_epoch', 100001, '# of step in an epoch')  # 30000
     flags.DEFINE_integer('test_step', 1000, '# of step to test a model')
@@ -38,7 +38,7 @@ def configure():
     flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
     flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')
     flags.DEFINE_integer('valid_num',3840,'the number of images in the validing set')
-    flags.DEFINE_integer('test_num',2907,'the number of images in the testing set')  # add test data
+    flags.DEFINE_integer('test_num',2907,'the number of images in the testing set')  # add test data bs:2907, cc: 4800
     flags.DEFINE_integer('batch', 3, 'batch size')              # 4
     flags.DEFINE_integer('batchsize', 3, 'total batch size')     # 4
     flags.DEFINE_integer('channel', 3, 'channel size')
