@@ -108,8 +108,8 @@ class Actions(object):
 
         # ——————————————  step：5  ——————————————#
         self.predictions = self.pred
-        self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')   # for net only
-        """
+        #self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')
+
         gamma = 0.5
         high0 = tf.ones(self.annotations.shape, "int64")
         low0 = tf.zeros(self.annotations.shape, "int64")
@@ -124,7 +124,7 @@ class Actions(object):
                           tf.int32, name='m_iou/weights')
         self.m_iou, self.miou_op = tf.metrics.mean_iou(self.annotations, self.decoded_predictions, self.conf.class_num,
                                                        weights, name='m_iou/m_ious')
-        """
+
         self.out = tf.cast(self.decoded_predictions, tf.float32)
         self.gt = tf.cast(self.annotations, tf.float32)
 
@@ -335,7 +335,7 @@ class Actions(object):
             dices.append(dice)
             accuracies.append(accuracy)
 
-            # predictions.append(self.sess.run(self.decoded_predictions, feed_dict=feed_dict))
+            predictions.append(self.sess.run(self.predictions, feed_dict=feed_dict))       # <-------decoded_predictions
             net_predictions.append(self.sess.run(self.decoded_net_pred, feed_dict=feed_dict))
             # outputs.append(self.sess.run(self.outputs, feed_dict=feed_dict))
 
@@ -346,7 +346,7 @@ class Actions(object):
 
         print(np.shape(probabilitys))
         #np.save(self.conf.sample_dir + "outputs" + ".npy", np.array(outputs))
-        """
+
         print('----->saving predictions')
         print(np.shape(predictions))
         
@@ -357,7 +357,7 @@ class Actions(object):
                 #np.save(self.conf.sample_dir + "pred" + str(num) + ".npy", prediction[i])
                 num += 1
                 imsave(prediction[i], self.conf.sample_dir + str(index * prediction.shape[0] + i) + '.png')
-        """
+        
         print('----->saving net_predictions')
         print(np.shape(net_predictions))
         num = 0
