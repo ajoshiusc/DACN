@@ -38,18 +38,18 @@ Dataset
 6.  run ``` save_results.m ``` to convert 2d results into 3d volumes.  
 
 ## Results  
-test on brainsuite data:  
+- test on brainsuite data:  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/result_bs.png)  
 
 
-test on CC-359 dataset:   
+- test on CC-359 dataset:   
 ![image](https://github.com/yanlong-sun/DACN/blob/main/result_cc.png)  
 
 ## Network structure  
-### Dense Unet Structure  
+- Dense Unet Structure  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/Dense%20Unet%20Structure.png)  
 
-### DACN Structure  
+- DACN Structure  
 ![image](https://github.com/yanlong-sun/DACN/blob/main/DACN%20Structure.png)
 
 ## Training data we used are as following:
