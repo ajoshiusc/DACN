@@ -108,13 +108,13 @@ class Actions(object):
 
         # ——————————————  step：5  ——————————————#
         self.predictions = self.pred
-        #self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')
+        self.decoded_predictions = tf.argmax(self.predictions, self.channel_axis, name='accuracy/decode_pred')   #----->
 
         gamma = 0.5
         high0 = tf.ones(self.annotations.shape, "int64")
         low0 = tf.zeros(self.annotations.shape, "int64")
         gamma0 = tf.ones(self.annotations.shape) * gamma
-        self.decoded_predictions = tf.where(tf.greater_equal(self.predictions, gamma0), high0, low0)
+        #self.decoded_predictions = tf.where(tf.greater_equal(self.predictions, gamma0), high0, low0)
 
         correct_prediction = tf.equal(self.annotations, self.decoded_predictions, name='accuracy/correct_pred')
         self.accuracy_op = tf.reduce_mean(tf.cast(correct_prediction, tf.float32, name='accuracy/cast'),
@@ -357,7 +357,7 @@ class Actions(object):
                 #np.save(self.conf.sample_dir + "pred" + str(num) + ".npy", prediction[i])
                 num += 1
                 imsave(prediction[i], self.conf.sample_dir + str(index * prediction.shape[0] + i) + '.png')
-        
+
         print('----->saving net_predictions')
         print(np.shape(net_predictions))
         num = 0
