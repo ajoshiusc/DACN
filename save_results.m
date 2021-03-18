@@ -1,8 +1,8 @@
 clc;
 clear;
 
-prediction_path = '../png_pred_results/';
-save_path = '../pred_nii_bsdata/dl_pred_nii/';
+prediction_path = '../png_pred_results_densenet/';
+save_path = '../pred_nii_bsdata_densenet/dl_pred_nii/';
 pred_folder= dir(prediction_path);
 pred_file={pred_folder.name};
 

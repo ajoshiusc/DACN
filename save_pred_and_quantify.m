@@ -2,9 +2,9 @@ clc;
 clear;
 
 % masks' path
-masks_path = '../Dataset/test_data/test_data_bmp/masks/';
-preds_path = '../network4/samples_net/';
-final_preds_path = '../png_pred_results/';
+masks_path = '../Dataset/test_data-bs/test_data_bmp/masks/';
+preds_path = '../network4/samples/';
+final_preds_path = '../png_pred_results_densenet/';
 masks_folder=dir(masks_path);
 masks_file= {masks_folder.name};
 i = 0;  % index for the pred masks 
