@@ -346,7 +346,7 @@ class Actions(object):
 
         print(np.shape(probabilitys))
         #np.save(self.conf.sample_dir + "outputs" + ".npy", np.array(outputs))
-
+        """
         print('----->saving predictions')
         print(np.shape(predictions))
         
@@ -357,7 +357,7 @@ class Actions(object):
                 #np.save(self.conf.sample_dir + "pred" + str(num) + ".npy", prediction[i])
                 num += 1
                 imsave(prediction[i], self.conf.sample_dir + str(index * prediction.shape[0] + i) + '.png')
-
+        """
         print('----->saving net_predictions')
         print(np.shape(net_predictions))
         num = 0
