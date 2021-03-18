@@ -30,7 +30,7 @@ Dataset
         ...  
 ```  
 2.  run ``` input.m ``` to slice the volumn into 2d image.  
-3.  run ``` create_h5py.py ``` to convert dataset into hdf5 file.  
+3.  run ``` create_h5.py ``` to convert dataset into hdf5 file.  
 4.  train： ``` python main.py ```  
     valid： ``` python main.py --action=test ```  
     predict： ``` python main.py --action=predict ```  
