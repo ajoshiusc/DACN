@@ -68,7 +68,7 @@ end
 
 %% plot
 figure(1)
-x = [[dice_coef_dl'], [dice_coef_bse'], [dice_coef_unet'], [dice_coef_denseunet']];
+x = [[dice_coef_dl'], [dice_coef_bse'], [dice_coef_denseunet'], [dice_coef_unet']];
 y = categorical(case_name_list);
 barh(y, x)
 set(gca,'FontSize',9);
@@ -82,9 +82,10 @@ ax.LineWidth = 2;
 ylim=get(gca,'Ylim');
 line([dice_dl_avg, dice_dl_avg], ylim, 'Color','blue','LineStyle','--', 'LineWidth',2 );
 line([dice_bse_avg, dice_bse_avg], ylim, 'Color','red','LineStyle','--', 'LineWidth',2 );
-line([dice_unet_avg, dice_unet_avg], ylim, 'Color','yellow','LineStyle','--', 'LineWidth',2 );
-line([dice_denseunet_avg, dice_denseunet_avg], ylim, 'Color','magent','LineStyle','--', 'LineWidth',2 );
-legend({['DACN: ', num2str(dice_dl_avg)], ['Brainsuite: ', num2str(dice_bse_avg)], ['UNet: ', num2str(dice_unet_avg)], ['DenseUNet: ', num2str(dice_denseunet_avg)]}, 'Location','southwest');
+line([dice_denseunet_avg, dice_denseunet_avg], ylim, 'Color','#EDB120','LineStyle','--', 'LineWidth',2 );
+line([dice_unet_avg, dice_unet_avg], ylim, 'Color','#7E2F8E','LineStyle', '--', 'LineWidth',2 );
+
+legend({['DACN: ', num2str(dice_dl_avg)], ['Brainsuite: ', num2str(dice_bse_avg)], ['DenseUNet: ', num2str(dice_denseunet_avg)], ['UNet: ', num2str(dice_unet_avg)]}, 'Location','southwest');
 saveas(gcf,'result_final.png')
 
 
