@@ -39,7 +39,7 @@ Dataset
 
 ## Results  
 - test on brainsuite data:  
-![image](https://github.com/yanlong-sun/DACN/blob/main/result_bs.png)  
+![image](https://github.com/yanlong-sun/DACN/blob/main/result_final.png)  
 
 
 - test on CC-359 dataset:   
