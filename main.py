@@ -11,16 +11,16 @@ def configure():
     #————————————————————————————--—————————————————————————# 
     flags.DEFINE_string('network_name', 'denseunet', 'Use which framework:  unet, denseunet, deeplabv3plus')
     
-    flags.DEFINE_integer('max_epoch', 100001, '# of step in an epoch')  # 30000
-    flags.DEFINE_integer('test_step', 1000, '# of step to test a model')
-    flags.DEFINE_integer('save_step', 1000, '# of step to save a model')
+    flags.DEFINE_integer('max_epoch', 20001, '# of step in an epoch')  # 100001
+    flags.DEFINE_integer('test_step', 500, '# of step to test a model')
+    flags.DEFINE_integer('save_step', 500, '# of step to save a model')
     
     flags.DEFINE_integer('valid_start_epoch', 1,'start step to test a model')
-    flags.DEFINE_integer('valid_end_epoch', 100001, 'end step to test a model')
-    flags.DEFINE_integer('valid_stride_of_epoch',1000, 'stride to test a model')
+    flags.DEFINE_integer('valid_end_epoch', 20001, 'end step to test a model')
+    flags.DEFINE_integer('valid_stride_of_epoch',500, 'stride to test a model')
     flags.DEFINE_string('model_name', 'model', 'Model file name')
     flags.DEFINE_integer('reload_epoch', 0, 'Reload epoch')
-    flags.DEFINE_integer('test_epoch', 99001, 'Test or predict epoch')
+    flags.DEFINE_integer('test_epoch', 19501, 'Test or predict epoch')
     flags.DEFINE_integer('random_seed', int(time.time()), 'random seed')
     
     flags.DEFINE_integer('summary_step', 10000000, '# of step to save the summary')
