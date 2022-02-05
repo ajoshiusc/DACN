@@ -4,7 +4,7 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'))
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-action = 'training';       % 'training' 'valid' 'test'
+action = 'test';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
 train_test_data_masks =  ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
