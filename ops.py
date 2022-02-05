@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-import tensorflow.contrib.slim as slim
+#import tensorflow.compat.v1.contrib.slim as slim
 
 
 def conv2d(inputs, rate_field, num_outputs, kernel_size, scope, stride=1, rate=1,

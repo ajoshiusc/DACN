@@ -4,7 +4,7 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'))
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-action = 'test';       % 'training' 'valid' 'test'
+action = 'training';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
 train_test_data_masks =  ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
@@ -17,7 +17,7 @@ for num_nii = 3 : length(slices_nii_file)
     
     case_name = slices_nii_file(num_nii);
     case_name = char(case_name);
-    if case_name(1)=='s' || case_name(1)=='c' || case_name(1)=='p'
+    if case_name(1)~='s' 
         continue;
     end
     
@@ -25,8 +25,8 @@ for num_nii = 3 : length(slices_nii_file)
      disp(finishing)
      disp(case_name)
     
-    v_slices = load_untouch_nii(fullfile(train_test_data_slices, case_name, 't1.nii.gz'));  
-    v_masks = load_untouch_nii(fullfile(train_test_data_slices, case_name, 't1.mask.nii.gz'));
+    v_slices = load_untouch_nii(fullfile(train_test_data_slices, case_name, 'anat','mprage_anonymized.nii.gz'));  
+    v_masks = load_untouch_nii(fullfile(train_test_data_slices, case_name, 'anat','mprage_anonymized.mask.nii.gz'));
     %v_masks = load_untouch_nii([train_test_data_masks, case_name, '_ss.nii.gz']);
     slices_tif = v_slices.img;
     masks_tif = uint8(v_masks.img);    

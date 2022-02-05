@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import tensorflow as tf
 from actions import Actions
+
 def configure():
 
     flags = tf.app.flags
@@ -33,7 +34,7 @@ def configure():
  
     flags.DEFINE_integer('gpu_num', 1, 'the number of GPU')
     #—————————————————————————————————————————————————————# 
-    flags.DEFINE_string('data_dir', '../Dataset/h5py/', 'Name of data directory')
+    flags.DEFINE_string('data_dir', './tmpDataset/h5py/', 'Name of data directory')
     flags.DEFINE_string('train_data', 'training_data.hdf5', 'Training data')
     flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
     flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')
@@ -47,12 +48,12 @@ def configure():
     flags.DEFINE_boolean('is_training', True, '是否训练') 
     flags.DEFINE_integer('class_num', 2, 'output class number')
     #————————————————————————————-—————————————————————————#
-    flags.DEFINE_string('network_dir', '../network4/', 'network_dir')
-    flags.DEFINE_string('logdir', '../network4/logdir/', 'Log dir')
-    flags.DEFINE_string('modeldir', '../network4/modeldir/', 'Model dir')
-    flags.DEFINE_string('sample_dir', '../network4/samples/', 'Sample directory')
-    flags.DEFINE_string('sample_net_dir', '../network4/samples_net/', 'Sample directory')
-    flags.DEFINE_string('record_dir', '../network4/record/', 'Experiment record directory')
+    flags.DEFINE_string('network_dir', './network_bse/', 'network_dir')
+    flags.DEFINE_string('logdir', './network_bse/logdir/', 'Log dir')
+    flags.DEFINE_string('modeldir', './network_bse/modeldir/', 'Model dir')
+    flags.DEFINE_string('sample_dir', './network_bse/samples/', 'Sample directory')
+    flags.DEFINE_string('sample_net_dir', './network_bse/samples_net/', 'Sample directory')
+    flags.DEFINE_string('record_dir', './network_bse/record/', 'Experiment record directory')
     #————————————————————————————-—————————————————————————# 
     flags.DEFINE_boolean('use_asc', False, 'use ASC or not')
     flags.DEFINE_string('down_conv_name', 'conv2d', 'Use which conv op: conv2d, deform_conv2d, adaptive_conv2d, adaptive_separate_conv2d')
@@ -132,7 +133,7 @@ def predict():
 
 
 def main(argv):
-    start = time.clock()
+    start = time.process_time()
     parser = argparse.ArgumentParser()
     parser.add_argument('--action', dest='action', type=str, default='train',
                         help='actions: train, test, or predict')
@@ -157,7 +158,7 @@ def main(argv):
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-    config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
+    config = tf.compat.v1.ConfigProto(allow_soft_placement=True, log_device_placement=True)
     config.gpu_options.allow_growth = True
-    sess = tf.Session(config=config)
-    tf.app.run()
+    sess = tf.compat.v1.Session(config=config)
+    tf.compat.v1.app.run()

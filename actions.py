@@ -3,7 +3,7 @@ import random
 random.seed(7)
 import os
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from data_reader import H5DataLoader
 from img_utils import imsave
 from denseunet import DenseUnet
