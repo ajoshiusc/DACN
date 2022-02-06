@@ -34,5 +34,5 @@ class H5DataLoader(object):
         cur_indexes.sort()
         
         outx, outy = self.images[cur_indexes], self.labels[cur_indexes]
-        
+        outy = np.uint8(outy>128)
         return outx, outy

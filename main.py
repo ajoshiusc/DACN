@@ -34,7 +34,7 @@ def configure():
  
     flags.DEFINE_integer('gpu_num', 1, 'the number of GPU')
     #—————————————————————————————————————————————————————# 
-    flags.DEFINE_string('data_dir', './tmpDataset/h5py/', 'Name of data directory')
+    flags.DEFINE_string('data_dir', './BSEDataset/h5py/', 'Name of data directory')
     flags.DEFINE_string('train_data', 'training_data.hdf5', 'Training data')
     flags.DEFINE_string('valid_data', 'valid_data.hdf5', 'Validation data')
     flags.DEFINE_string('test_data', 'test_data.hdf5', 'Testing data')

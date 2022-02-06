@@ -4,7 +4,7 @@ addpath(genpath('/home/ajoshi/projects/svreg/src'))
 addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
 addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-action = 'test';       % 'training' 'valid' 'test'
+action = 'valid';       % 'training' 'valid' 'test'
 
 train_test_data_slices = ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
 train_test_data_masks =  ['/ImagePTE1/ajoshi/data/DACN_Dataset/', action, '_data_nii/'];
@@ -37,10 +37,10 @@ for num_nii = 3 : length(slices_nii_file)
     for i = 1 : n3 
         if i == 1
             slices = im2uint8(rescale(slices_tif(:,:,1), 0, 1));
-            masks = 255*masks_tif(:,:,1);
+            masks = masks_tif(:,:,1);
         else
             single_slice = im2uint8(rescale(slices_tif(:,:,i), 0, 1));
-            single_mask = 255*masks_tif(:,:,i);
+            single_mask = masks_tif(:,:,i);
             slices = cat(3, slices, single_slice); 
             masks = cat(3, masks, single_mask);
         end
