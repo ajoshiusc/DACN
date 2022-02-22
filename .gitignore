@@ -17,7 +17,7 @@ hcp_data_skull_scalp/*
 network_bse/*
 png_pred_results_densenet/*
 BSEDataset/*
-
+network_skull_scalp/*
 # Distribution / packaging
 .Python
 build/
