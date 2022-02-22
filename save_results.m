@@ -1,31 +1,36 @@
 clc;
 clear;
+addpath(genpath('/home/ajoshi/projects/svreg/src'))
+addpath(genpath('/home/ajoshi/projects/svreg/3rdParty'));
+addpath(genpath('/home/ajoshi/projects/svreg/MEX_Files'));
 
-prediction_path = '../png_pred_results_densenet/';
-save_path = '../pred_nii_bsdata_densenet/dl_pred_nii/';
+
+
+prediction_path = '/home/ajoshi/projects/DACN/png_pred_results_densenet/';
+save_path = '/home/ajoshi/projects/DACN/png_pred_results_densenet/dl_pred_nii/';
 pred_folder= dir(prediction_path);
 pred_file={pred_folder.name};
 
-for num_pred= 3 : length(pred_file)
+for num_pred= 4 : length(pred_file)
     case_name = pred_file(num_pred);
     case_name = char(case_name);
     finishing = [num2str(num_pred-3),'/',num2str(length(pred_file)-3)];
     disp(finishing)
     disp(case_name)
     
-    v_orig = load_untouch_nii(['../Dataset/test_data/test_data_nii/slices/', case_name, '.nii.gz']);
+    v_orig = load_untouch_nii(['/ImagePTE1/ajoshi/data/DACN_Dataset/test_data_nii/', case_name, '/anat/mprage_anonymized.nii.gz']);
     v2 = v_orig;
     v3 = v_orig;
     v4 = v_orig;
     [a1, a2, a3] = size(v_orig.img);
     
     %% Image Part
-    first_slice_path = ['../Dataset/test_data/test_data_bmp/slices/', case_name,'_', num2str(10001), '.bmp' ];
+    first_slice_path = ['/home/ajoshi/projects/DACN/BSEDataset/test_data/test_data_bmp/slices/', case_name,'_', num2str(10001), '.bmp' ];
     slices = im2gray(imread(first_slice_path));    
     slices = get_original_size(slices, a1, a2);
     
     for i = 2 : a3
-        single_slice_path = ['../Dataset/test_data/test_data_bmp/slices/', case_name,'_', num2str(10000+i), '.bmp' ];
+        single_slice_path = ['/home/ajoshi/projects/DACN/BSEDataset/test_data/test_data_bmp/slices/', case_name,'_', num2str(10000+i), '.bmp' ];
         single_slice = im2gray(imread(single_slice_path));
         single_slice = get_original_size(single_slice, a1, a2);
         figure(1)
@@ -37,13 +42,13 @@ for num_pred= 3 : length(pred_file)
         if j == 1
             preds = imread([prediction_path, case_name, '/', case_name,'_', num2str(10001), '.bmp' ]);
             %preds = im2gray(preds);
-            masks = imread(['../Dataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10001), '.bmp' ]);
+            masks = imread(['/home/ajoshi/projects/DACN/BSEDataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10001), '.bmp' ]);
             
             preds = get_original_size(preds, a1, a2);
             masks = get_original_size(masks, a1, a2);
         else
             single_pred = imread([prediction_path case_name, '/', case_name,'_', num2str(10000+j), '.bmp' ]);
-            single_mask = imread(['../Dataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10000+j), '.bmp' ]);
+            single_mask = imread(['/home/ajoshi/projects/DACN/BSEDataset/test_data/test_data_bmp/masks/', case_name,'_', num2str(10000+j), '.bmp' ]);
             
             single_pred = get_original_size(single_pred, a1, a2);
             single_mask = get_original_size(single_mask, a1, a2);
