@@ -1,6 +1,7 @@
 
 import h5py
 import numpy as np
+from keras.utils.np_utils import to_categorical   
 
 class H5DataLoader(object):
 
@@ -34,5 +35,12 @@ class H5DataLoader(object):
         cur_indexes.sort()
         
         outx, outy = self.images[cur_indexes], self.labels[cur_indexes]
-        outy = np.uint8(outy>128)
+
+        print(len(np.unique(outy.flatten())))
+
+        if len(np.unique(outy.flatten()))<3:
+            outy = np.uint8(outy>128)
+        else:
+            outy = to_categorical(outy/30, num_classes=9)
+        
         return outx, outy
