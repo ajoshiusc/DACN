@@ -46,7 +46,7 @@ def configure():
     flags.DEFINE_integer('height', 256, 'height size')
     flags.DEFINE_integer('width', 256, 'width size')
     flags.DEFINE_boolean('is_training', True, '是否训练') 
-    flags.DEFINE_integer('class_num', 2, 'output class number')
+    flags.DEFINE_integer('class_num', 9, 'output class number')
     #————————————————————————————-—————————————————————————#
     flags.DEFINE_string('network_dir', './network_skull_scalp/', 'network_dir')
     flags.DEFINE_string('logdir', './network_skull_scalp/logdir/', 'Log dir')
